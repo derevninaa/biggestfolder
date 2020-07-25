@@ -2,34 +2,40 @@ import java.io.File;
 import java.io.FileNotFoundException;
 
 public class ParametersBag {
-    private String[] args;
+    private long limit;
+    private String path;
 
-    public ParametersBag(String[] args) {
-        this.args = args;
-    }
+    public ParametersBag(String[] args) throws FileNotFoundException {
+        if (args.length != 4) {
+            throw new IllegalArgumentException("Введите корректные аргументы в формате -l ... -d ...");
+        }
 
-    public String getPath() throws FileNotFoundException {
-        String folderPath = args[0];
-        File file = new File(folderPath);
-        if (file.exists() || !file.isDirectory()) {
-            return folderPath;
-        } else {
+        limit = 0;
+        path = "";
+
+        for (int i = 0; i < args.length; i++) {
+            if (args[i].equals("-l")) {
+                limit = SizeCalculator.getSizeFromHumanReadable(args[i + 1]);
+            } else if (args[i].equals("-d")) {
+                path = args[i + 1];
+            }
+        }
+
+        if (limit <= 0) {
+            throw new IllegalArgumentException();
+        }
+
+        File folder = new File(path);
+        if (!folder.exists() || !folder.isDirectory()) {
             throw new FileNotFoundException();
         }
     }
 
-    public long getLimit(){
-        if(isDigit(args[1])) {
-            return Long.parseLong(args[1]);
-        }else throw new NumberFormatException();
+    public String getPath() {
+        return path;
     }
 
-    private static boolean isDigit(String number){
-        try{
-            Long.parseLong(number);
-            return true;
-        }catch (NumberFormatException numberFormatException) {
-            return false;
-        }
+    public long getLimit(){
+        return limit;
     }
 }

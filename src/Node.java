@@ -35,8 +35,8 @@ public class Node {
 
     public void addChild(Node node) {
         node.setLevel(level + 1);
-        children.add(node);
         node.setLimit(sizeLimit);
+        children.add(node);
     }
 
     public long getSize() {
@@ -55,12 +55,12 @@ public class Node {
     public String toString() {
         StringBuilder builder = new StringBuilder();
         String size = SizeCalculator.getHumanReadableSize(getSize());
-        builder.append(folder.getName() + " - " + size + "\n");
+        builder.append(folder.getName()).append(" - ").append(size).append("\n");
         for (Node child : children) {
-            if (child.getSize() > sizeLimit){
+            if (child.getSize() < sizeLimit){
                 continue;
             }
-            builder.append("  ".repeat(level + 1) + child.toString());
+            builder.append("  ".repeat(level + 1)).append(child.toString());
         }
         return builder.toString();
     }
