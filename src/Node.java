@@ -20,6 +20,10 @@ public class Node {
         this.sizeLimit = sizeLimit;
     }
 
+    public void setLimit(long sizeLimit) {
+        this.sizeLimit = sizeLimit;
+    }
+
     public File getFolder() {
         return folder;
     }
@@ -28,9 +32,11 @@ public class Node {
         return children;
     }
 
+
     public void addChild(Node node) {
         node.setLevel(level + 1);
         children.add(node);
+        node.setLimit(sizeLimit);
     }
 
     public long getSize() {
